@@ -9,10 +9,10 @@ from colorama import Fore, Style, init
 
 init(autoreset=True)
 
-# 🔥 Clear old results
+#  Clear old results
 open("results.txt", "w").close()
 
-# 🔥 FULL SERVICE DATABASE (your version)
+#  FULL SERVICE DATABASE (your version)
 service_db = {
     20: "FTP Data", 21: "FTP", 22: "SSH", 23: "Telnet", 25: "SMTP",
     53: "DNS", 67: "DHCP", 68: "DHCP", 69: "TFTP", 80: "HTTP",
@@ -36,12 +36,12 @@ service_db = {
     9999: "Java Debug", 27017: "MongoDB"
 }
 
-# 🔥 UI Banner
+#  UI Banner
 print(Fore.CYAN + "=" * 55)
 print(Fore.YELLOW + "   JATHIN ADVANCED NETWORK SCANNER")
 print(Fore.CYAN + "=" * 55)
 
-# 🔥 Input
+#  Input
 target = input(Fore.GREEN + "Enter target IP or URL: ")
 
 try:
@@ -64,7 +64,7 @@ print_lock = threading.Lock()
 discovered_ports = []
 q = Queue()
 
-# 🔥 PORT SCAN FUNCTION
+#  PORT SCAN FUNCTION
 def portscan(port):
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -80,14 +80,14 @@ def portscan(port):
 
             banner = ""
 
-            # 🔥 HTTP probing
+            #  HTTP probing
             if port == 80:
                 try:
                     s.send(b"GET / HTTP/1.1\r\nHost: example.com\r\n\r\n")
                 except:
                     pass
 
-            # 🔥 Banner grabbing
+            #  Banner grabbing
             try:
                 banner = s.recv(1024).decode(errors="ignore")
             except:
@@ -113,13 +113,13 @@ def portscan(port):
             else:
                 print(Fore.MAGENTA + "[SERVICE] Unknown")
 
-            # 🔥 SERVICE DATABASE MAPPING
+            #  SERVICE DATABASE MAPPING
             if port in service_db:
                 print(Fore.CYAN + f"[INFO] {service_db[port]} service detected")
             else:
                 print(Fore.CYAN + "[INFO] Unknown service")
 
-            # 🔥 SECURITY ALERT
+            #  SECURITY ALERT
             if port == 3306:
                 print(Fore.RED + "[WARNING] Database exposed!")
 
@@ -129,7 +129,7 @@ def portscan(port):
         pass
 
 
-# 🔥 THREAD WORKER
+#  THREAD WORKER
 def threader():
     while True:
         worker = q.get()
@@ -137,14 +137,14 @@ def threader():
         q.task_done()
 
 
-# 🔥 CREATE THREADS
+#  CREATE THREADS
 for x in range(100):
     t = threading.Thread(target=threader)
     t.daemon = True
     t.start()
 
 
-# 🔥 ADD PORTS
+#  ADD PORTS
 for port in range(start_port, end_port + 1):
     q.put(port)
 
@@ -156,7 +156,7 @@ print(Fore.CYAN + "-" * 60)
 print(Fore.YELLOW + f"Completed in: {end_time - datetime.fromtimestamp(start_time)}")
 print(Fore.CYAN + "-" * 60)
 
-# 🔥 NMAP SUGGESTION
+#  NMAP SUGGESTION
 if discovered_ports:
     ports = ",".join(map(str, discovered_ports))
     print(Fore.GREEN + "Suggested Nmap command:")
